@@ -2,7 +2,7 @@
 
 export default function Home() {
   return (
-    <div className="center">
+    <div className="flex-center h-screen">
       <h1 className="text-brand">
         hello world
       </h1>
