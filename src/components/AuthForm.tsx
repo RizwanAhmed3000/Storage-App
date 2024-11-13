@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -18,24 +17,25 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 
-
-const formSchema = z.object({
-    fullName: z.string().min(2).max(50),
-    email: z.string().min(2).max(50),
-})
-
-
 type FormType = "sign-in" | "sign-up"
+
+const authFormSchema = (formType: FormType) => {
+    return z.object({
+        email: z.string().email(),
+        fullName: formType === 'sign-up' ? z.string().min(2).max(50) : z.string().optional(),
+    })
+}
 
 const AuthForm = ({ type }: { type: FormType }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     // 1. Define your form.
+    const formSchema = authFormSchema(type)
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            fullName: "",
             email: "",
+            fullName: "",
         },
     })
 
@@ -89,7 +89,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                     <Button type="submit" className="form-submit-button" disabled={isLoading}>
                         {type === 'sign-in' ? "Sign In" : "Sign Up"}
                         {
-                            isLoading && (<Image src={`/assets/icons/loader.svg`} alt="loader" width={24} height={24} className="animate-spint ml-2" />)
+                            isLoading && (<Image src={`/assets/icons/loader.svg`} alt="loader" width={24} height={24} className="animate-spin ml-2" />)
                         }
                     </Button>
                     {
@@ -104,7 +104,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                             {type === 'sign-in' ? "Don't have an account?" : "Already have an account?"}
                         </p>
                         <Link href={type === 'sign-in' ? "/sign-up" : "/sign-in"} className="ml-1 font-medium text-brand">
-                        {' '}
+                            {' '}
                             {type === 'sign-in' ? "Sign Up" : "Sign In"}
                         </Link>
                     </div>
