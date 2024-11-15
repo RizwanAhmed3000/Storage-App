@@ -126,7 +126,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
             {/* OTP Modal */}
 
             {
-                true && <OTPModal email={form.getValues('email')} accountId={accountId} />
+                accountId && <OTPModal email={form.getValues('email')} accountId={accountId} />
             }
 
         </>
