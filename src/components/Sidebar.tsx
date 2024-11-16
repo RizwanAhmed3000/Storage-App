@@ -6,7 +6,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
-const Sidebar = () => {
+interface Props {
+    fullName: string;
+    email: string;
+    avatar: string;
+}
+
+const Sidebar = ({ fullName, email, avatar }: Props) => {
     const pathname = usePathname()
     return (
         <aside className='sidebar'>
@@ -32,13 +38,13 @@ const Sidebar = () => {
                 </ul>
             </nav>
 
-            <Image src={`/assets/images/files-2.png`} alt='logo' width={400} height={300} className='w-full'/>
+            <Image src={`/assets/images/files-2.png`} alt='logo' width={400} height={300} className='w-full' />
 
             <div className='sidebar-user-info'>
-                <Image src={avatarPlaceholder} alt='avatar' width={40} height={40} className='sidebar-user-avatar'/>
+                <Image src={avatarPlaceholder || avatar} alt='avatar' width={40} height={40} className='sidebar-user-avatar' />
                 <div className="hidden lg:block">
-                    <p className="subtitle-2 capitalize">{"fullName"}</p>
-                    <p className="caption">{"email"}</p>
+                    <p className="subtitle-2 capitalize">{fullName}</p>
+                    <p className="caption">{email}</p>
                 </div>
             </div>
         </aside>
