@@ -5,6 +5,7 @@ import { createAdminClient } from "../appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import { parseStringfy } from "../utils";
 import { cookies } from "next/headers";
+import { avatarPlaceholder } from "@/constants";
 
 // Helper function
 
@@ -57,7 +58,7 @@ export const createAccount = async ({ fullName, email }: { fullName: string, ema
         const data = {
             fullName,
             email,
-            avatar: 'https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8=',
+            avatar: avatarPlaceholder,
             accountId
         }
 
