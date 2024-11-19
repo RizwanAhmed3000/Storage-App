@@ -48,7 +48,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
         setIsLoading(true)
         setErrorMessage('')
         try {
-            const user = type === 'sign-up' ? await createAccount({ fullName: values.fullName || "", email: values.email }) : await signInUser({email: values.email})
+            const user = type === 'sign-up' ? await createAccount({ fullName: values.fullName || "", email: values.email }) : await signInUser({ email: values.email })
             console.log("user ===>>> ", user)
             user.accountId === null ? setErrorMessage(user.error) : setAccountId(user.accountId);
         } catch (error) {
