@@ -2,8 +2,9 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from './ui/button';
-import { cn, getFileType } from '@/lib/utils';
+import { cn, convertFileToUrl, getFileType } from '@/lib/utils';
 import Image from 'next/image';
+import Thumbnail from './Thumbnail';
 
 interface Props {
     className?: string;
@@ -38,7 +39,9 @@ const FileUploader = ({ className, ownerId, accountId }: Props) => {
 
                                 return (
                                     <li className='uploader-preview-item' key={`${file.name}-${index}`}>
-                                        test
+                                        <div className="flex items-center gap-3">
+                                            <Thumbnail type={type} extension={extension} url={convertFileToUrl(file)} />
+                                        </div>
                                     </li>
                                 )
                             })
