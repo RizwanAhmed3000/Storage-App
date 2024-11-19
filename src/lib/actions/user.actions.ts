@@ -6,6 +6,7 @@ import { appwriteConfig } from "../appwrite/config";
 import { parseStringfy } from "../utils";
 import { cookies } from "next/headers";
 import { avatarPlaceholder } from "@/constants";
+import { redirect } from "next/navigation";
 
 // Helper function
 
@@ -94,19 +95,47 @@ export const verifyOtp = async ({ accountId, password }: { accountId: string, pa
 
 export const getCurrentUser = async () => {
     const { databases, account } = await createSessionClient();
-
+    // console.log(account)
     const result = await account.get();
+    // console.log(result)
 
     const user = await databases.listDocuments(
         appwriteConfig.databaseId,
         appwriteConfig.userCollectionId,
         [Query.equal("accountId", result.$id)]
     )
-
     // console.log("user ===>>>> ", user);
 
     if (user.total <= 0) return null;
 
     return parseStringfy(user.documents[0])
+}
 
+export const signOutUser = async () => {
+    const { account } = await createSessionClient();
+    try {
+        await account.deleteSession('current');
+        (await cookies()).delete("appwrite-session");
+        console.log('User logged out successfully');
+    } catch (error) {
+        handleError(error, "Failed to signOut")
+        console.error('Error logging out:', error);
+    } finally {
+        redirect('/sign-in');
+    }
+}
+
+export const signInUser = async ({ email }: { email: string }) => {
+    try {
+        const existingUser = await getUserByEmail(email);
+        if (existingUser) {
+            await sendEmailOtp({ email });
+            return parseStringfy({ accountId: existingUser.accountId });
+        }
+
+        return parseStringfy({ accountId: null, error: "User Not Found" })
+        
+    } catch (error) {
+        handleError(error, "Failed to signIn user")
+    }
 }
