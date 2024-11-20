@@ -22,6 +22,11 @@ const FileUploader = ({ className, ownerId, accountId }: Props) => {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
+    const removeFileHandler = (e: React.MouseEvent<HTMLImageElement, MouseEvent>, fileName: string) => {
+        e.stopPropagation();
+        setFiles((prevFile) => prevFile.filter((file) => file.name !== fileName))
+    }
+
     return (
         <div {...getRootProps()} className='cursor-pointer'>
             <input {...getInputProps()} />
@@ -41,7 +46,12 @@ const FileUploader = ({ className, ownerId, accountId }: Props) => {
                                     <li className='uploader-preview-item' key={`${file.name}-${index}`}>
                                         <div className="flex items-center gap-3">
                                             <Thumbnail type={type} extension={extension} url={convertFileToUrl(file)} />
+                                            <div className="preview-item-name">
+                                                {file.name}
+                                                <Image src={`/assets/icons/file-loader.gif`} alt='loader' width={80} height={26} />
+                                            </div>
                                         </div>
+                                        <Image src={`/assets/icons/remove.svg`} width={24} height={24} onClick={(e) => removeFileHandler(e, file.name)} alt='remove' />
                                     </li>
                                 )
                             })
