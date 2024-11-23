@@ -83,7 +83,7 @@ export const getFiles = async () => {
 
         const queries = createQueries(currentUser);
 
-        console.log("queries ===>>> ", {currentUser, queries})
+        // console.log("queries ===>>> ", {currentUser, queries})
 
         const files = await databases.listDocuments(
             appwriteConfig.databaseId,
@@ -91,7 +91,7 @@ export const getFiles = async () => {
             queries
         )
 
-        console.log("files ==>> ", files)
+        // console.log("files ==>> ", files)
 
         return parseStringfy(files);
 
