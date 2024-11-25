@@ -8,7 +8,6 @@ import {
     DialogHeader,
     DialogTitle
 } from "@/components/ui/dialog";
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -32,6 +31,14 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const [action, setAction] = useState<ActionType | null>(null);
     const [name, setName] = useState(file.name);
     const [isLoading, setIsLoading] = useState(false);
+
+    const closeAllModals = () => {
+        setIsModalOpen(false);
+        setIsDropdownOpen(false);
+        setAction(null);
+        setName(file.name);
+        //setEmails([]);
+    }
 
     const renderDialogContent = () => {
         if (!action) return null;
