@@ -23,6 +23,8 @@ import Link from 'next/link';
 import { constructDownloadUrl } from '@/lib/utils';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
+import { renameFile } from '@/lib/actions/file.actions';
+import { usePathname } from 'next/navigation';
 
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
@@ -31,6 +33,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const [action, setAction] = useState<ActionType | null>(null);
     const [name, setName] = useState(file.name);
     const [isLoading, setIsLoading] = useState(false);
+    const path = usePathname()
 
     const closeAllModals = () => {
         setIsModalOpen(false);
@@ -38,6 +41,20 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         setAction(null);
         setName(file.name);
         //setEmails([]);
+    }
+
+    const handleAction = async () => {
+        if (!action) return;
+        setIsLoading(true);
+        let success = false;
+
+        const actions = {
+            rename: () => renameFile({ fileId: file.$id, name, extension: file.extension, path }),
+        }
+
+        success = await actions[action.value as keyof typeof actions]();
+        if (success) closeAllModals();
+        setIsLoading(false)
     }
 
     const renderDialogContent = () => {
@@ -60,10 +77,10 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                 {
                     ['rename', 'delete', 'share'].includes(value) && (
                         <DialogFooter className='flex flex-col gap-3 md:flex-row'>
-                            <Button>
+                            <Button className='modal-cancel-button' onClick={closeAllModals}>
                                 Cancel
                             </Button>
-                            <Button>
+                            <Button className='modal-submit-button' onClick={handleAction}>
                                 <p className='capitalize'>{value}</p>
                                 {isLoading && (
                                     <Image src={`/assets/icons/loader.svg`} alt='loader' width={24} height={24} className='animate-spin' />
