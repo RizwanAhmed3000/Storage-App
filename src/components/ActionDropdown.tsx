@@ -25,7 +25,7 @@ import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { renameFile } from '@/lib/actions/file.actions';
 import { usePathname } from 'next/navigation';
-import { FileDetails } from './ActionModalContent';
+import { FileDetails, ShareInput } from './ActionModalContent';
 
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
@@ -34,6 +34,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const [action, setAction] = useState<ActionType | null>(null);
     const [name, setName] = useState(file.name);
     const [isLoading, setIsLoading] = useState(false);
+    const [emails, setEmails] = useState([]);
     const path = usePathname()
 
     const closeAllModals = () => {
@@ -41,7 +42,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         setIsDropdownOpen(false);
         setAction(null);
         setName(file.name);
-        //setEmails([]);
+        setEmails([]);
     }
 
     const handleAction = async () => {
@@ -57,6 +58,8 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         if (success) closeAllModals();
         setIsLoading(false)
     }
+
+    const removeUserHandler = () => { }
 
     const renderDialogContent = () => {
         if (!action) return null;
@@ -76,6 +79,9 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                     }
                     {
                         value === "details" && <FileDetails file={file} />
+                    }
+                    {
+                        value === "share" && <ShareInput file={file} onInputChange={setEmails} onRemove={removeUserHandler} />
                     }
                 </DialogHeader>
                 {
