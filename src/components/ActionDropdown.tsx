@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle
@@ -23,7 +22,7 @@ import Link from 'next/link';
 import { constructDownloadUrl } from '@/lib/utils';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { renameFile } from '@/lib/actions/file.actions';
+import { renameFile, updateFileUsers } from '@/lib/actions/file.actions';
 import { usePathname } from 'next/navigation';
 import { FileDetails, ShareInput } from './ActionModalContent';
 
@@ -34,7 +33,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const [action, setAction] = useState<ActionType | null>(null);
     const [name, setName] = useState(file.name);
     const [isLoading, setIsLoading] = useState(false);
-    const [emails, setEmails] = useState([]);
+    const [emails, setEmails] = useState<string[]>([]);
     const path = usePathname()
 
     const closeAllModals = () => {
@@ -52,6 +51,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
         const actions = {
             rename: () => renameFile({ fileId: file.$id, name, extension: file.extension, path }),
+            share: () => updateFileUsers({ fileId: file.$id, emails, path }),
         }
 
         success = await actions[action.value as keyof typeof actions]();
@@ -59,7 +59,12 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         setIsLoading(false)
     }
 
-    const removeUserHandler = () => { }
+    const removeUserHandler = async (email: string) => {
+        const updatedEmails = emails.filter((e) => e !== email);
+        const success = await updateFileUsers({ fileId: file.$id, emails: updatedEmails, path });
+        if (success) setEmails(updatedEmails);
+        closeAllModals()
+    }
 
     const renderDialogContent = () => {
         if (!action) return null;
