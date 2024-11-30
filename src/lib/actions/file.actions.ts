@@ -136,3 +136,24 @@ export const updateFileUsers = async ({ fileId, emails, path }: UpdateFileUsersP
         handleError(error, "Failed to add the users")
     }
 }
+
+export const deleteFile = async ({ fileId, bucketFileId, path }: DeleteFileProps) => {
+    const { databases, storage } = await createAdminClient();
+    try {
+        const deleteFile = await databases.deleteDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.filesCollectionId,
+            fileId
+        );
+        if (deleteFile) {
+            await storage.deleteFile(
+                appwriteConfig.bucketId,
+                bucketFileId
+            )
+        }
+        revalidatePath(path);
+        return parseStringfy({ status: 'Success' });
+    } catch (error) {
+        handleError(error, "Failed to delete the file")
+    }
+}
