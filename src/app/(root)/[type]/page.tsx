@@ -1,14 +1,18 @@
 import FileCard from '@/components/FileCard';
 import Sort from '@/components/Sort';
 import { getFiles } from '@/lib/actions/file.actions';
+import { getFileTypesParams } from '@/lib/utils';
 import { Models } from 'node-appwrite';
 import React from 'react'
 
 const page = async ({ params }: SearchParamProps) => {
     const type = (await params)?.type as string || "";
+
+    const types = getFileTypesParams(type) as FileType[];
+    // console.log(types)
     // console.log("type ==>> ", type)
 
-    const files = await getFiles();
+    const files = await getFiles({ types });
 
     return (
         <div className='page-container'>
@@ -33,7 +37,7 @@ const page = async ({ params }: SearchParamProps) => {
                 <section className='file-list'>
                     {
                         files.documents.map((file: Models.Document) => (
-                            <FileCard key={file.$id} file={file}/>
+                            <FileCard key={file.$id} file={file} />
                         ))
                     }
                 </section>
