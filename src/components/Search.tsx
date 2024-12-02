@@ -19,28 +19,12 @@ const Search = () => {
     const path = usePathname();
     const [debouncedQuery] = useDebounce(query, 300);
 
-    useEffect(() => {
-        const fetchFiles = async () => {
-            if (debouncedQuery.length === 0) {
-                setResults([]);
-                setOpen(false);
-                return router.push(path.replace(searchParams.toString(), ""));
-            }
-
-            const files = await getFiles({ types: [], searchText: debouncedQuery });
-            setResults(files.documents);
-            setOpen(true);
-        };
-
-        fetchFiles();
-    }, [debouncedQuery])
-
     // useEffect(() => {
     //     const fetchFiles = async () => {
     //         if (debouncedQuery.length === 0) {
     //             setResults([]);
     //             setOpen(false);
-    //             router.push(path.replace(searchParams.toString(), ''));
+    //             return router.push(path.replace(searchParams.toString(), ""));
     //         }
 
     //         const files = await getFiles({ types: [], searchText: debouncedQuery });
@@ -50,6 +34,22 @@ const Search = () => {
 
     //     fetchFiles();
     // }, [debouncedQuery])
+
+    useEffect(() => {
+        const fetchFiles = async () => {
+            if (debouncedQuery.length === 0) {
+                setResults([]);
+                setOpen(false);
+                return router.push(path.replace(searchParams.toString(), ''));
+            }
+
+            const files = await getFiles({ types: [], searchText: debouncedQuery });
+            setResults(files.documents);
+            setOpen(true);
+        };
+
+        fetchFiles();
+    }, [debouncedQuery])
 
     useEffect(() => {
         if (!searchQuery) {
