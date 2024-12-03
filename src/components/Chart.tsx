@@ -40,10 +40,11 @@ const chartConfig = {
 } satisfies ChartConfig
 
 const Chart = ({ totalSpace }: { totalSpace: any }) => {
-    const { used, document, video, audio, other, image } = totalSpace;
+    const { used, document, video, other, image } = totalSpace;
 
-    // console.log(audio, "====>>>> audio")
-    console.log(convertFileSize(document.size), "====>>>> convertFileSize(used)")
+    // console.log(used, "====>>>> used")
+    // console.log(calculatePercentage(used), "====>>>> calculatePercentage(used)")
+    // console.log(convertFileSize(document.size), "====>>>> convertFileSize(used)")
 
     const chartData = [
         { type: "Documents ", size: document.size, fill: "#FA7275" },
@@ -86,12 +87,9 @@ const Chart = ({ totalSpace }: { totalSpace: any }) => {
                                                     y={viewBox.cy}
                                                     className="fill-foreground text-3xl font-bold"
                                                 >
-                                                    {used && calculatePercentage(used)
-                                                        ? calculatePercentage(used)
-                                                            .toString()
-                                                        // .replace(/^0+/, "")
-                                                        : "0"}
-                                                    %
+                                                    {
+                                                        used === 0 ? "0%" : `${calculatePercentage(used).toString()}%`
+                                                    }
                                                 </tspan>
                                                 <tspan
                                                     x={viewBox.cx}

@@ -1,7 +1,7 @@
 import FileCard from '@/components/FileCard';
 import Sort from '@/components/Sort';
-import { getFiles } from '@/lib/actions/file.actions';
-import { getFileTypesParams } from '@/lib/utils';
+import { getFiles, totalSpaceUsed } from '@/lib/actions/file.actions';
+import { convertFileSize, getFileTypesParams, getUsageSummary } from '@/lib/utils';
 import { Models } from 'node-appwrite';
 import React from 'react'
 
@@ -14,7 +14,17 @@ const page = async ({ searchParams, params }: SearchParamProps) => {
     // console.log(types)
     // console.log("type ==>> ", type)
 
-    const files = await getFiles({ types, searchText, sort });
+    const [files, totalSpace] = await Promise.all([
+        getFiles({ types, searchText, sort }),
+        totalSpaceUsed(),
+    ]);
+    // console.log(totalSpace)
+    const usageSummary = getUsageSummary(totalSpace);
+    // console.log(usageSummary)
+    const typeSize = usageSummary.filter((item) => {
+        const title = item.title.toLowerCase();
+        return type === title
+    })
 
     return (
         <div className='page-container'>
@@ -22,7 +32,7 @@ const page = async ({ searchParams, params }: SearchParamProps) => {
                 <h1 className="h1 capitalize">{type}</h1>
                 <div className="total-size-section">
                     <p className='body-1'>
-                        Total: <span className='h5'>{"totalSize"}</span>
+                        Total: <span className='h5'>{convertFileSize(typeSize[0].size)}</span>
                     </p>
                     <div className="sort-container">
                         <p className="body-1 hidden sm:block text-light-200">

@@ -19,16 +19,13 @@ export default async function Dashboard() {
     totalSpaceUsed(),
   ]);
 
-  // console.log(files)
-  // console.log(totalSpace)
-
   const usageSummary = getUsageSummary(totalSpace);
   // console.log(usageSummary)
 
   return (
     <div className="dashboard-container">
       <section>
-        <Chart totalSpace={totalSpace}/>
+        <Chart totalSpace={totalSpace} />
 
         <ul className="dashboard-summary-list">
           {usageSummary.map((summary) => (
