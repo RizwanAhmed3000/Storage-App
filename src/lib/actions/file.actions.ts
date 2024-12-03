@@ -198,7 +198,7 @@ export const totalSpaceUsed = async () => {
             }
         });
 
-        console.log(totalSpace)
+        // console.log(totalSpace)
 
         return parseStringfy(totalSpace);
 
