@@ -1,7 +1,7 @@
 'use server'
 
 import { InputFile } from "node-appwrite/file";
-import { createAdminClient } from "../appwrite";
+import { createAdminClient, createSessionClient } from "../appwrite";
 import { ID, Models, Query, Storage } from "node-appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import { constructFileUrl, getFileType, parseStringfy } from "../utils";
@@ -161,5 +161,48 @@ export const deleteFile = async ({ fileId, bucketFileId, path }: DeleteFileProps
         return parseStringfy({ status: 'Success' });
     } catch (error) {
         handleError(error, "Failed to delete the file")
+    }
+}
+
+export const totalSpaceUsed = async () => {
+    try {
+        const { databases } = await createSessionClient();
+        const currentUser = await getCurrentUser();
+        if (!currentUser) throw new Error("User not authenticated");
+
+        const files = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.filesCollectionId,
+            [Query.equal("owner", [currentUser.$id])]
+        )
+
+        // console.log(files, "====>>>> files")
+
+        const totalSpace = {
+            image: { size: 0, latestDate: "" },
+            document: { size: 0, latestDate: "" },
+            video: { size: 0, latestDate: "" },
+            audio: { size: 0, latestDate: "" },
+            other: { size: 0, latestDate: "" },
+            used: 0,
+            all: 2 * 1024 * 1024 * 1024 /* 2GB available bucket storage */,
+        };
+
+        files.documents.forEach((file) => {
+            const fileType = file.type as FileType;
+            totalSpace[fileType].size += file.size;
+            totalSpace.used += file.size;
+
+            if (!totalSpace[fileType].latestDate || new Date(file.$updatedAt) > new Date(totalSpace[fileType].latestDate)) {
+                totalSpace[fileType].latestDate = file.$updatedAt;
+            }
+        });
+
+        console.log(totalSpace)
+
+        return parseStringfy(totalSpace);
+
+    } catch (error) {
+        handleError(error, "Error calculating the space used")
     }
 }
