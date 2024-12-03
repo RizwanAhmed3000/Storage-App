@@ -28,7 +28,7 @@ export default async function Dashboard() {
   return (
     <div className="dashboard-container">
       <section>
-        <Chart />
+        <Chart totalSpace={totalSpace}/>
 
         <ul className="dashboard-summary-list">
           {usageSummary.map((summary) => (
