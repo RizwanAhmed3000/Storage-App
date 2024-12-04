@@ -222,7 +222,7 @@ export const getUsageSummary = (totalSpace: TotalSpace) => {
       title: "Media",
       size: totalSpace.video.size + totalSpace.audio.size,
       latestDate:
-        totalSpace.video.latestDate > totalSpace.audio.latestDate
+        (totalSpace.video.latestDate ?? "") > (totalSpace.audio.latestDate ?? "")
           ? totalSpace.video.latestDate
           : totalSpace.audio.latestDate,
       icon: "/assets/icons/file-video-light.svg",
