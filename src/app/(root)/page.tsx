@@ -4,7 +4,6 @@ import ActionDropdown from "@/components/ActionDropdown";
 import Chart from "@/components/Chart";
 import FormattedDateTime from "@/components/FormattedDateTime";
 import Thumbnail from "@/components/Thumbnail";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getFiles, totalSpaceUsed } from "@/lib/actions/file.actions";
 import { convertFileSize, getUsageSummary } from "@/lib/utils";

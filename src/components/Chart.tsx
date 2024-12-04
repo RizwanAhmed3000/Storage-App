@@ -4,10 +4,7 @@ import { Label, Pie, PieChart } from "recharts"
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+    CardFooter
 } from "@/components/ui/card"
 import {
     ChartConfig,
@@ -41,10 +38,6 @@ const chartConfig = {
 
 const Chart = ({ totalSpace }: { totalSpace: any }) => {
     const { used, document, video, other, image } = totalSpace;
-
-    // console.log(used, "====>>>> used")
-    // console.log(calculatePercentage(used), "====>>>> calculatePercentage(used)")
-    // console.log(convertFileSize(document.size), "====>>>> convertFileSize(used)")
 
     const chartData = [
         { type: "Documents ", size: document.size, fill: "#FA7275" },

@@ -2,7 +2,7 @@
 
 import { InputFile } from "node-appwrite/file";
 import { createAdminClient, createSessionClient } from "../appwrite";
-import { ID, Models, Query, Storage } from "node-appwrite";
+import { ID, Models, Query } from "node-appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import { constructFileUrl, getFileType, parseStringfy } from "../utils";
 import { revalidatePath } from "next/cache";
