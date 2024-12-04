@@ -29,7 +29,7 @@ export const convertFileSize = (sizeInBytes: number, digits?: number) => {
 export const calculatePercentage = (sizeInBytes: number) => {
   const totalSizeInBytes = 2 * 1024 * 1024 * 1024; // 2GB in bytes
   const percentage = (sizeInBytes / totalSizeInBytes) * 100;
-  console.log(percentage)
+  // console.log(percentage)
   return Number(percentage.toFixed(2));
 };
 
@@ -186,7 +186,23 @@ export const constructDownloadUrl = (bucketFileId: string) => {
 };
 
 // DASHBOARD UTILS
-export const getUsageSummary = (totalSpace: any) => {
+
+type SpaceDetails = {
+  size: number; // Example property, replace with actual properties of each object
+  latestDate?: string; // Optional property, replace with actual properties of each object
+};
+
+type TotalSpace = {
+  used: number;
+  all: number;
+  document: SpaceDetails;
+  video: SpaceDetails;
+  audio: SpaceDetails;
+  other: SpaceDetails;
+  image: SpaceDetails;
+};
+
+export const getUsageSummary = (totalSpace: TotalSpace) => {
   return [
     {
       title: "Documents",

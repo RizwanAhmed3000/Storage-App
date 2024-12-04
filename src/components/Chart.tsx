@@ -36,8 +36,23 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-const Chart = ({ totalSpace }: { totalSpace: any }) => {
+type SpaceDetails = {
+    size: number; // Example property, replace with actual properties of each object
+    latestDate?: string; // Optional property, replace with actual properties of each object
+};
+
+type TotalSpace = {
+    used: number;
+    document: SpaceDetails;
+    video: SpaceDetails;
+    other: SpaceDetails;
+    image: SpaceDetails;
+    all: number;
+};
+
+const Chart = ({ totalSpace }: { totalSpace: TotalSpace }) => {
     const { used, document, video, other, image } = totalSpace;
+    // console.log(totalSpace)
 
     const chartData = [
         { type: "Documents ", size: document.size, fill: "#FA7275" },
