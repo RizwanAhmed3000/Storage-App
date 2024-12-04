@@ -94,21 +94,25 @@ export const verifyOtp = async ({ accountId, password }: { accountId: string, pa
 }
 
 export const getCurrentUser = async () => {
-    const { databases, account } = await createSessionClient();
-    // console.log(account)
-    const result = await account.get();
-    // console.log(result)
+    try {
+        const { databases, account } = await createSessionClient();
+        // console.log(account)
+        const result = await account.get();
+        // console.log(result)
 
-    const user = await databases.listDocuments(
-        appwriteConfig.databaseId,
-        appwriteConfig.userCollectionId,
-        [Query.equal("accountId", result.$id)]
-    )
-    // console.log("user ===>>>> ", user);
+        const user = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.equal("accountId", result.$id)]
+        )
+        // console.log("user ===>>>> ", user);
 
-    if (user.total <= 0) return null;
+        if (user.total <= 0) return null;
 
-    return parseStringfy(user.documents[0])
+        return parseStringfy(user.documents[0])
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 export const signOutUser = async () => {
@@ -134,7 +138,7 @@ export const signInUser = async ({ email }: { email: string }) => {
         }
 
         return parseStringfy({ accountId: null, error: "User Not Found" })
-        
+
     } catch (error) {
         handleError(error, "Failed to signIn user")
     }
