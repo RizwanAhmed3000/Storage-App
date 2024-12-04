@@ -51,7 +51,7 @@ export default async function Dashboard() {
                 <Separator className="bg-light-400" />
                 <p className="subtitle-1 text-light-200 text-center">Last Updated</p>
                 <FormattedDateTime
-                  date={summary.latestDate}
+                  date={summary.latestDate || ""}
                   className="text-center"
                 />
               </div>
